@@ -1,18 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using RecyclerView;
 using UnityEngine;
 
-public class GridView : MonoBehaviour
+public class GridView : GridViewAbstract
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public override RectTransform GetRect => throw new System.NotImplementedException();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

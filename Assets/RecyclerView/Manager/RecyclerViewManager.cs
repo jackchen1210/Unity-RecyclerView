@@ -15,20 +15,23 @@ namespace RecyclerView{
 
         public bool IsInit { get; private set; }
         public RectTransform GetRect => rect;
-
-        private IGridView gridViewPrefab;
+        public GridViewAbstract GridView { get=> gridViewPrefab; set=> gridViewPrefab=value; }
+        [SerializeField]private GridViewAbstract gridViewPrefab;
         private IViewModel viewModel;
         private ViewCalculator viewCalculator = new ViewCalculator();
 
         private void Awake()
         {
-            scrollRect = GetComponent<ScrollRect>();
-            rect = GetComponent<RectTransform>();
+            scrollRect = GetComponent<ScrollRect>() ?? throw new NullReferenceException(nameof(scrollRect));
+            rect = GetComponent<RectTransform>() ?? throw new NullReferenceException(nameof(rect));
+        }
+        private void Start()
+        {
+            this.gridViewPrefab = gridViewPrefab ?? throw new NullReferenceException(nameof(gridViewPrefab));
         }
 
-        public void Init(IGridView gridViewPrefab,IViewModel viewModel)
+        public void Init(IViewModel viewModel)
         {
-            this.gridViewPrefab = gridViewPrefab ?? throw new ArgumentNullException(nameof(gridViewPrefab));
             this.viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
 
             IsInit = true;

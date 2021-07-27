@@ -33,6 +33,7 @@ namespace Tests
            var gameobject = new GameObject();
             gameobject.AddComponent<ScrollRect>();
             var mgr = gameobject.AddComponent<RecyclerViewManager>();
+            mgr.GridView = new GameObject().AddComponent<FakeGridView>();
             return mgr;
         }
 
@@ -41,7 +42,7 @@ namespace Tests
         {
             yield return null;
             var mgr = CreateManager();
-                mgr.Init(new FakeGridView(),new FakeViewModel(CreateFakeDatas(0)));
+                mgr.Init(new FakeViewModel(CreateFakeDatas(0)));
             Assert.IsTrue(mgr.IsInit);
         }
 
@@ -60,7 +61,7 @@ namespace Tests
             yield return null;
             var mgr = CreateManager();
             Assert.Catch<ArgumentException>(() => {
-                mgr.Init(null,null);
+                mgr.Init(null);
             });
         }
 
@@ -70,18 +71,15 @@ namespace Tests
             yield return null;
             var amount = 10;
             var gridSizeDelta = new Vector2(100,100);
-            var fakeGrid = new FakeGridView();
             var fakeModel = new FakeViewModel(CreateFakeDatas(amount));
             var mgr = CreateManager();
             var mgrRect = mgr.GetRect;
             var viewCalculator = new ViewCalculator();
-
-            fakeGrid.SetRectSize(gridSizeDelta);
             viewCalculator.ScrollRectHeight = mgrRect.sizeDelta.y;
             viewCalculator.GridViewHeight = gridSizeDelta.y;
             viewCalculator.TotalItemAmount = amount;
 
-            mgr.Init(fakeGrid,fakeModel);
+            mgr.Init(fakeModel);
             mgr.Create();
             Assert.AreEqual(viewCalculator.GridsSpawnAmount, mgr.GetGridsSpawnAmount());
         }
